@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestureToVoice A | Muz'x AI</title>
+    <!-- Google Fonts: Inter, Roboto, Open Sans aur Orbitron -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --dark-navy: #0B2E6D;
+            --royal-blue: #0F4DB8;
+            --bright-blue: #1E88FF;
+            --neon-cyan: #00E5FF;
+            --light-cyan: #B8F8FF;
+            --ice-white: #F7FCFF;
+            --text-gray: #5B6B7A;
+            --glass: rgba(255, 255, 255, 0.7);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', 'Roboto', 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #F7FCFF 0%, #EAF9FF 40%, #DDF7FF 70%, #B8F8FF 100%);
+            height: 100vh;
+            display: flex;
+            color: var(--dark-navy);
+            overflow: hidden;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 300px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-right: 1px solid rgba(0, 229, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            padding: 40px 25px;
+            box-shadow: 10px 0 30px rgba(11, 46, 109, 0.05);
+        }
+
+        .brand-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .brand-section h1 {
+            font-family: 'Inter', 'Roboto', 'Open Sans', sans-serif;
+            font-size: 26px;
+            color: var(--dark-navy);
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .brand-section .sub-brand {
+            font-family: 'Inter', 'Roboto', 'Open Sans', sans-serif;
+            font-size: 18px;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .nav-menu { list-style: none; margin-top: 20px; }
+
+        .nav-item {
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease; 
+            font-weight: 500;
+            color: var(--text-gray);
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, var(--dark-navy), var(--royal-blue));
+            color: white;
+            box-shadow: 0 5px 15px rgba(15, 77, 184, 0.3);
+        }
+
+        .nav-item:hover {
+            background: linear-gradient(90deg, var(--dark-navy), var(--royal-blue));
+            color: white;
+            box-shadow: 0 8px 20px rgba(15, 77, 184, 0.3);
+            transform: translateX(8px);
+        }
+
+        .company-footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 25px 15px;
+            border-top: 1px solid rgba(0, 229, 255, 0.1);
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 15px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.02);
+        }
+
+        .brand-glow {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            color: var(--royal-blue);
+            margin-bottom: 2px;
+            animation: pulseGlow 2s infinite alternate;
+        }
+
+        .dev-name {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark-navy);
+            letter-spacing: 0.5px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        @keyframes pulseGlow {
+            from { text-shadow: 0 0 5px rgba(0, 229, 255, 0.2); transform: scale(1); }
+            to { text-shadow: 0 0 15px rgba(0, 229, 255, 0.6); transform: scale(1.05); }
+        }
+
+        /* Main Dashboard Area */
+        .main-dashboard {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            grid-gap: 30px;
+        }
+
+        .header-top {
+            grid-column: 1 / span 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 229, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            height: 450px;
+            background: #000;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 3px solid var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+            position: relative;
+        }
+
+        .video-wrapper img { width: 100%; height: 100%; object-fit: contain; }
+
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 229, 255, 0.8);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* DETECTION BOX STYLE */
+        .detection-result-box {
+            text-align: center;
+            background: rgba(11, 46, 109, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+
+        #live-sign {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            color: var(--royal-blue);
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+            display: block;
+            margin-top: 10px;
+        }
+
+        .search-box {
+            background: white;
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            width: 100%;
+            font-size: 16px;
+            margin-bottom: 20px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .image-display {
+            width: 100%;
+            height: 250px;
+            background: rgba(255,255,255,0.5);
+            border: 2px dashed rgba(0, 229, 255, 0.3);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .image-display img { max-height: 100%; border-radius: 10px; }
+
+        .btn-action {
+            width: 100%;
+            background: linear-gradient(90deg, var(--dark-navy), var(--royal-blue));
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="brand-section">
+            <h1>GestureToVoice Ai</h1>
+            <div class="sub-brand">Ishara AI</div>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item active">Dashboard</li>
+            <li class="nav-item">Live Detection</li>
+            <li class="nav-item">Sign Library</li>
+            <li class="nav-item">History</li>
+            <li class="nav-item">Settings</li>
+        </ul>
+        <div class="company-footer">
+            <p style="font-size: 10px; color: #777; margin-bottom: 5px; letter-spacing: 1.5px; text-transform: uppercase;">Created By</p>
+            <h2 class="brand-glow">Muz'x AI</h2>
+            <h2 class="dev-name">Muzammil & CO</h2>
+        </div>
+    </div>
+
+    <div class="main-dashboard">
+        <div class="header-top">
+            <h2 style="font-size: 20px;">AI RECOGNITION PANEL</h2>
+            <div style="color: var(--text-gray); font-size: 14px;">System Status: <span style="color: #00c853; font-weight: bold;">● Online</span></div>
+        </div>
+
+        <!-- Left Column -->
+        <div class="left-col">
+            <div class="card">
+                <div class="card-title">🎥 LIVE CAMERA FEED</div>
+                <div class="video-wrapper">
+                    <div class="status-badge">LIVE</div>
+                    <img src="{{ url_for('video_feed') }}" alt="AI Feed">
+                </div>
+            </div>
+
+            <!-- NAYA DETECTION RESULT PANEL -->
+            <div class="card">
+                <div class="card-title">🔍 REAL-TIME TRANSLATION</div>
+                <div class="detection-result-box">
+                    <span style="font-size: 14px; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px;">Detected Sign</span>
+                    <h2 id="live-sign">Waiting...</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-col">
+            <div class="card">
+                <div class="card-title">📖 SIGN DICTIONARY</div>
+                <input type="text" id="searchInput" class="search-box" placeholder="Enter sign name...">
+                <div class="image-display" id="imageDisplay">
+                    <p style="color: #bbb;">Image will appear here</p>
+                </div>
+                <button class="btn-action" onclick="handleSearch()">SEARCH SIGN</button>
+            </div>
+
+            <div class="card">
+                <div class="card-title">PROJECT INFO</div>
+                <p style="font-size: 14px; color: var(--text-gray); line-height: 1.6;">
+                    <strong>Major:</strong> BS AI (Semester 4)<br>
+                    <strong>Technology:</strong> Python, Flask, MediaPipe, OpenCV
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Real-time Prediction Fetching Script
+        setInterval(function() {
+            fetch('/get_prediction')
+                .then(response => response.json())
+                .then(data => {
+                    const signDisplay = document.getElementById('live-sign');
+                    signDisplay.innerText = data.prediction;
+                    
+                    // Style change on analyzing
+                    if(data.prediction === "Analyzing...") {
+                        signDisplay.style.opacity = "0.5";
+                        signDisplay.style.color = "#5B6B7A";
+                    } else {
+                        signDisplay.style.opacity = "1";
+                        signDisplay.style.color = "#0F4DB8";
+                    }
+                })
+                .catch(err => console.log("Waiting for backend..."));
+        }, 400);
+
+        // Dictionary Search Function
+        const searchInput = document.getElementById('searchInput');
+        const imageDisplay = document.getElementById('imageDisplay');
+
+        function handleSearch() {
+            const sign = searchInput.value.trim();
+            if (sign === "") return;
+            imageDisplay.innerHTML = '<p style="color: var(--royal-blue);">Searching...</p>';
+            fetch('/search_sign', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sign: sign })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    imageDisplay.innerHTML = `<img src="${data.url}" alt="${sign}">`;
+                } else {
+                    imageDisplay.innerHTML = `<p style="color: #ff4444;">${data.message}</p>`;
+                }
+            });
+        }
+
+        searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSearch(); });
+    </script>
+</body>
+</html>
